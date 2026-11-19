@@ -1,0 +1,24 @@
+# Formal proof for rtl/src/intent_watchdog.sv (docs/safety.md S1 on the FPGA path):
+# "no valid input for N cycles => output = STOP", plus pass-through of valid inputs.
+# Run: sby -f rtl/formal/intent_watchdog.sby   (make formal)
+
+[tasks]
+prove
+cover
+
+[options]
+prove: mode prove
+prove: depth 12
+cover: mode cover
+cover: depth 24
+
+[engines]
+smtbmc z3
+
+[script]
+read_verilog -sv -formal intent_watchdog.sv
+chparam -set TIMEOUT_CYCLES 8 intent_watchdog
+prep -top intent_watchdog
+
+[files]
+../src/intent_watchdog.sv
