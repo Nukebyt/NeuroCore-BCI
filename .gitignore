@@ -62,4 +62,6 @@ ml/**/runs/
 Thumbs.db
 .vscode/
 .idea/
-hardware/neurocore/fab/quote-DRAFT/
+# make hw-check outputs (reports, Gerbers, drill); only the curated BOM is tracked
+hardware/neurocore/fab/*
+!hardware/neurocore/fab/neurocore-bom.csv

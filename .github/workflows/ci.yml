@@ -43,6 +43,13 @@ jobs:
           make formal SBY="yowasp-sby --yosys yowasp-yosys --smtbmc yowasp-yosys-smtbmc
           --witness yowasp-yosys-witness"
 
-      # Prints SKIP until Phase 3 adds a KiCad project; fails if it exists without kicad-cli.
-      - name: Hardware checks
+      # KiCad 9 from the official KiCad PPA; only kicad-cli is used (ERC, DRC, BOM, Gerbers).
+      - name: Install KiCad 9
+        run: |
+          sudo add-apt-repository -y ppa:kicad/kicad-9.0-releases
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends kicad
+          kicad-cli version
+
+      - name: Hardware checks (ERC, DRC + schematic parity)
         run: make hw-check
