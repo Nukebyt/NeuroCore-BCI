@@ -1045,7 +1045,7 @@
    "value": "4.99k",
    "footprint": "Resistor_SMD:R_0603_1608Metric",
    "symbol_uuid": "1acc123a-0433-5b66-9f63-cb55ae7d13c5",
-   "note": "limits current if buffer rails (ADR-0006 issue 1)",
+   "note": "limits clamp current if a buffer rails",
    "dnp": false,
    "pins": {
     "1": "S1_BUF",
@@ -1098,6 +1098,32 @@
    "pins": {
     "1": "S2_ADC",
     "2": "SREF_ADC"
+   }
+  },
+  {
+   "ref": "D4",
+   "value": "BAW56",
+   "footprint": "Package_TO_SOT_SMD:SOT-23",
+   "symbol_uuid": "53b194e1-7248-5fd2-81df-ec8cac623e13",
+   "note": "shadow-lane clamp",
+   "dnp": false,
+   "pins": {
+    "1": "S1_ADC",
+    "2": "S2_ADC",
+    "3": "GND"
+   }
+  },
+  {
+   "ref": "D5",
+   "value": "BAW56",
+   "footprint": "Package_TO_SOT_SMD:SOT-23",
+   "symbol_uuid": "8b4254f2-d1b1-5f5b-991f-e09d195ef2eb",
+   "note": "shadow-lane clamp (K2 unused)",
+   "dnp": false,
+   "pins": {
+    "1": "SREF_ADC",
+    "2": null,
+    "3": "GND"
    }
   },
   {

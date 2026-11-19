@@ -61,6 +61,9 @@ def sym(name: str, prefix: str, left: str, right: str = "") -> None:
 sym("R", "R", "1:~", "2:~")
 sym("C", "C", "1:~", "2:~")
 sym("LED", "D", "1:K", "2:A")
+# Dual diode, common anode (BAW56): cathodes on pins 1 and 2, anode pin 3.
+# BAW56 DS Rev. C, Connection Diagram (p. 2).
+sym("D_DUAL_CA", "D", "1:K1 2:K2", "3:A")
 sym("SW", "SW", "1:~", "2:~")
 sym("SW_SPDT", "SW", "1:A 3:B", "2:C")
 sym("TP", "TP", "1:~")
@@ -176,6 +179,7 @@ FP = {
     "TQFP64": "Package_QFP:TQFP-64_10x10mm_P0.5mm",
     "TSSOP20": "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm",
     "SOIC8": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+    "SOT23": "Package_TO_SOT_SMD:SOT-23",
     "SOT235": "Package_TO_SOT_SMD:SOT-23-5",
     "SOT236": "Package_TO_SOT_SMD:SOT-23-6",
     "WSON8": "Package_SON:WSON-8-1EP_2x2mm_P0.5mm_EP0.9x1.6mm",
@@ -675,11 +679,31 @@ r("BIAS_OUT", "BIAS_EL", "10k", note="bias electrode series resistor")
 r("E1_EL", "S1_TAP", "10k", note="shadow tap series R")
 r("E2_EL", "S2_TAP", "10k", note="shadow tap series R")
 r("REF_EL", "SREF_TAP", "10k", note="shadow tap series R")
-r("S1_BUF", "S1_ADC", "4.99k", note="limits current if buffer rails (ADR-0006 issue 1)")
+r("S1_BUF", "S1_ADC", "4.99k", note="limits clamp current if a buffer rails")
 r("S2_BUF", "S2_ADC", "4.99k")
 r("SREF_BUF", "SREF_ADC", "4.99k")
 c("S1_ADC", "SREF_ADC", "1nF", note="C0G")
 c("S2_ADC", "SREF_ADC", "1nF", note="C0G")
+# Clamp each shadow-lane ADC input to GND. A buffer on +-2.5 V can swing to -2.5 V, below the
+# ADS131M04 abs max of AGND - 1.6 V (DS §6.1); its own input diode only clamps negative
+# inputs at reverse breakdown (§8.3.1). BAW56 VF <= 715 mV at 1 mA (DS p. 2), and the fault
+# current is (2.5 - 0.7) V / 4.99 kOhm ~ 0.36 mA. ADR-0006 issue 1.
+add(
+    "D_DUAL_CA",
+    "BAW56",
+    "SOT23",
+    {1: "S1_ADC", 2: "S2_ADC", 3: "GND"},
+    "shadow-lane clamp",
+    ref="D4",
+)
+add(
+    "D_DUAL_CA",
+    "BAW56",
+    "SOT23",
+    {1: "SREF_ADC", 2: None, 3: "GND"},
+    "shadow-lane clamp (K2 unused)",
+    ref="D5",
+)
 for _ in range(2):
     c("AVDD_EEG", "GND", "100nF", note="OPA2333 V+")
     c("AVSS_EEG", "GND", "100nF", note="OPA2333 V-")

@@ -84,6 +84,7 @@ NOTE_ANCHOR = {
     "LM27761": "U7",
     "BQ21040": "U8",
     "OPA2333": "U5",
+    "shadow-lane clamp": "U2",
     "Rd": "J6",
     "bias": "U1",
 }
@@ -139,8 +140,7 @@ def setup_board() -> pcbnew.BOARD:
         nc.SetClearance(mm(0.15))
         nc.SetViaDiameter(mm(0.6))
         nc.SetViaDrill(mm(0.3))
-        # The library ESP32-S3-WROOM-1 footprint has 0.2 mm thermal vias in its GND pad.
-        ds.m_MinThroughDrill = mm(0.2)
+        ds.m_MinThroughDrill = mm(MIN_DRILL_MM)
     except Exception as e:  # API differences between KiCad versions
         print("netclass setup skipped:", e)
     rect = pcbnew.PCB_SHAPE(board)
@@ -199,6 +199,23 @@ def add_zone(board, net, layer, pad=0.3, priority=0) -> None:
     o.RemoveAllContours()
     o.AddOutline(chain)
     board.Add(z)
+
+
+# Smallest finished hole on the board. The library ESP32-S3-WROOM-1 footprint has 0.2 mm
+# thermal vias (0.6 mm pads) in its ground pad; Espressif's land pattern (DS v1.8 Fig. 11-1)
+# shows those vias but gives no size, so they are drilled at 0.3 mm like the routing vias
+# (0.15 mm annular ring) and every fab's standard process can make the board.
+MIN_DRILL_MM = 0.3
+
+
+def enlarge_small_drills(fp) -> None:
+    for pad in fp.Pads():
+        d = pad.GetDrillSize()
+        if d.x and pcbnew.ToMM(d.x) < MIN_DRILL_MM:
+            size = pcbnew.ToMM(pad.GetSize().x)
+            if size < MIN_DRILL_MM + 0.3:
+                raise RuntimeError(f"{fp.GetFPIDAsString()}: pad too small for {MIN_DRILL_MM} mm")
+            pad.SetDrillSize(pcbnew.VECTOR2I(mm(MIN_DRILL_MM), mm(MIN_DRILL_MM)))
 
 
 def strap_adjacent_pins(board, max_pitch_mm: float = 0.55, width_mm: float = 0.2) -> int:
@@ -265,6 +282,7 @@ def place(design: dict, nc_names: dict[tuple[str, str], str]) -> pcbnew.BOARD:
     fps = {}
     for part in design["parts"]:
         fp = load_fp(part["footprint"])
+        enlarge_small_drills(fp)
         fp.SetReference(part["ref"])
         fp.SetValue(part["value"])
         fp.Reference().SetTextSize(pcbnew.VECTOR2I(mm(0.8), mm(0.8)))

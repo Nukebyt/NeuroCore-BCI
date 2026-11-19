@@ -20,10 +20,12 @@ Living progress log. Work proceeds autonomously through everything that doesn't 
 ## Phase 3 — NeuroCore Rev A: unverified draft schematic + PCB (not for ordering)
 - Datasheets for every IC in `docs/datasheets/` (TI, Espressif, Bosch); pin/value traceability in `NOTES.md`.
 - `hardware/neurocore/gen/`: `design.py` (schematic, symbol library, `design.json`), `check_netlist.py`, `build_pcb.py` (KiCad 9 placement + SES import + GND pours), `route.sh` (full pipeline with Freerouting 2.1.0).
-- Results: ERC 0; netlist 448/448 pins on the intended net; 4-layer 86 × 55 mm board, 139 parts, fully autorouted; KiCad DRC 0 errors, 0 unconnected, 0 schematic-parity issues (silk warnings only). Renders in `docs/reports/img/`. No gerbers on purpose.
+- Results: ERC 0; netlist 453/453 pins on the intended net; 4-layer 86 × 55 mm board, 141 parts, fully autorouted; KiCad DRC 0 errors, 0 unconnected, 0 schematic-parity issues (silk warnings only). Renders in `docs/reports/img/`. No gerbers on purpose.
 - BOM: `hardware/neurocore/fab/neurocore-bom.csv`.
-- Quote (2026-11-19): PCB Power offer INQ663178, 5 pcs bare board, 4L FR4 1.6 mm ENIG 1/0.5 oz, ₹6,650 + 18 % GST, 7 WD to dispatch, valid 30 days. Their drill-tolerance table starts at 0.50 mm: confirm 0.30 mm vias and 0.20 mm ESP32-pad holes before ordering. Lion Circuits quote pending.
-- **Gate not passed:** nine open issues in ADR-0006 (shadow-lane abs max, shared MISO, LM27761 divider, LDO dropout, USB Rd source, battery polarity, autorouted analog, land patterns, lead-off LEDs). Reviewer sign-off required before ordering.
+- Quote (2026-11-19): PCB Power offer INQ663178, 5 pcs bare board, 4L FR4 1.6 mm ENIG 1/0.5 oz, ₹6,650 + 18 % GST, 7 WD to dispatch, valid 30 days. Their drill-tolerance table starts at 0.50 mm; the board now has no hole below 0.30 mm (confirm 0.30 mm vias with them). Re-quote needed after the design changes. Lion Circuits quote pending.
+- **PCB fixes (2026-11-19):** BAW56 clamps D4/D5 on the shadow-lane ADC inputs (abs max); all holes ≥ 0.3 mm (ESP32 thermal vias redrilled); `route.sh` retries until KiCad DRC sees a complete route (Freerouting 2.1.0 sometimes drops vias/wires from its SES). Verified against datasheets: LM27761 divider, TLV757P dropout, USB-C Rd (Type-C spec Table 4-25). Board: 141 parts, ERC 0, DRC 0 errors / 0 unconnected / 0 parity.
+- **Firmware requirement from the dropout check:** shut down below a VBAT cutoff of ≥ 3.5 V under load (VBAT_SENSE on IO4) to keep the 3.3 V rail regulated.
+- **Still open before ordering (ADR-0006):** battery connector polarity (check the pack), J4 cable-entry direction, land patterns vs datasheets, autorouted analog section (ROADMAP §3.4 checklist), lead-off LEDs dropped. Reviewer sign-off required.
 
 ## Phase 4 prep — drivers written ahead of hardware
 - **T4.1 ADS1299-4 driver** — `firmware/neurocore/drivers/ads1299/`: power-up per DS §11.1, register write + read-back verify, RDATAC frames, µV scaling, lead-off status, test-signal mode. 17 host tests against a simulated chip that enforces the datasheet timing rules; mutation check 10/11 killed (survivor is redundant code). ADR-0007.

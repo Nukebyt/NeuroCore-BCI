@@ -15,6 +15,7 @@ Every pin assignment and component value in `hardware/neurocore/gen/design.py` t
 | BQ21040 | `bq21040.pdf` | TI SLUSCE2D |
 | TPD4E02B04 | `tpd4e02b04.pdf` | TI SLVSD85B (Jul 2016) |
 | TPD4EUSB30 | `tpd4eusb30.pdf` | TI SLVSAC2G (Jun 2021) |
+| BAW56 | `baw56-revC.pdf` | Fairchild/onsemi BAW56 Rev. C |
 
 ST datasheets (LSM6DSO, USBLC6) could not be downloaded (st.com refused automated requests), so those parts were replaced by BMI270 and TPD4EUSB30.
 
@@ -49,11 +50,15 @@ ST datasheets (LSM6DSO, USBLC6) could not be downloaded (st.com refused automate
 
 ## Power
 - TPS7A20 (U13 2.5 V, U14 3.3 V), SOT-23-5 DBV: IN 1, GND 2, EN 3, NC 4, OUT 5 (p. 4); CIN 1 µF, COUT ≥ 1 µF (ROC); 7 µVrms, 300 mA.
-- TLV757P (U9, 3.3 V), DBV: IN 1, GND 2, EN 3, NC 4, OUT 5 (Table 4-1); ≥ 1 µF in/out.
-- LM27761 (U7, −2.5 V), WSON-8 DSG 2 × 2 mm: pins Table 4-1 p. 3; VOUT = −1.22 V × (R1 + R2)/R2, R2 ≥ 50 kΩ (§7.2.2.4); C1 1 µF flying, C2 4.7 µF in, C3 4.7 µF CPOUT, C4 2.2 µF out (typical application p. 1, §7.2.2.5).
+- TLV757P (U9, 3.3 V), DBV: IN 1, GND 2, EN 3, NC 4, OUT 5 (Table 4-1); ≥ 1 µF in/out. Dropout 3.3 V output: ≤ 425 mV at 1 A, −40…85 °C (§5.5); typical ≈ 145 mV at 0.5 A / 25 °C, ≈ 170 mV at 85 °C (Fig. 5-14). Current limit ≥ 1.2 A (§5.5).
+- LM27761 (U7, −2.5 V), WSON-8 DSG 2 × 2 mm: pins Table 4-1 p. 3; VOUT = −1.22 V × (R1 + R2)/R2 (Eq. 5), R2 ≥ 50 kΩ (§7.2.2.4); R1 between VOUT and VFB, R2 between VFB and GND (Typical Application figure, p. 1); VFB reference 1.202–1.238 V (§5.5); C1 1 µF flying, C2 4.7 µF in, C3 4.7 µF CPOUT, C4 2.2 µF out (typical application p. 1, §7.2.2.5).
 - BQ21040 (U8), SOT-23-6: pins p. 3; I_charge = KISET / RISET, KISET 540 AΩ typ (§7); TS → 10 kΩ to VSS if no NTC (pin table); VIN/OUT caps 1–10 µF.
 
 ## Protection
 - TPD4E02B04 (U10–U12), USON-10 DQA: bidirectional, VRWM ±3.6 V, leakage ≤ 10 nA at ±2.5 V; pins IO1 1, IO2 2, GND 3/8, IO3 4, IO4 5, NC 6/7/9/10.
 - TPD4EUSB30 (U15), DQA: D1+ 1, D1− 2, GND 3/8, D2+ 4, D2− 5 (Table 5-1 p. 3); IO 0–6 V.
-- USB-C sink: Rd 5.1 kΩ on CC1/CC2 is from the USB Type-C specification, not a datasheet in this folder. Verify against the spec before ordering.
+- USB-C sink: Rd = 5.1 kΩ (±20 %, or ±10 % to detect source power capability) from each CC pin to GND: USB Type-C Cable and Connector Specification Release 2.0 (Aug 2019), Table 4-25 "Sink CC Termination (Rd) Requirements", PDF p. 236. The spec is © USB 3.0 Promoter Group, so it is kept locally as `usb-type-c-spec-r2.0.pdf` (gitignored), not committed. Download: https://www.usb.org/document-library (USB Type-C Spec R2.0).
+
+## Shadow-lane clamps
+- BAW56 (D4, D5), SOT-23: common anode pin 3, cathodes pins 1 and 2 (Connection Diagram p. 2). VF ≤ 715 mV at 1 mA, ≤ 855 mV at 10 mA; IR ≤ 2.5 µA at 70 V (25 °C); IF(AV) 200 mA (p. 2). Leakage at the ≈ 0 V working point is not specified.
+- Why: ADS131M04 analog inputs abs max AGND − 1.6 V and ±10 mA (§6.1); negative inputs are clamped only by the input diode's reverse breakdown (§8.3.1).
