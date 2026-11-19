@@ -1,0 +1,265 @@
+{
+  "spec": "protocol/nip/spec.md",
+  "generated_by": "python -m protocol.nip.gen_vectors",
+  "crc_check": {
+    "input_ascii": "123456789",
+    "crc16": "0x29B1"
+  },
+  "valid": [
+    {
+      "name": "heartbeat_stop_t0",
+      "fields": {
+        "seq": 0,
+        "t_ms": 0,
+        "intent": 0,
+        "level": 0,
+        "confidence": 0,
+        "flags": 0
+      },
+      "bytes": "504e000000000000000000000000c39a"
+    },
+    {
+      "name": "intent_hold",
+      "fields": {
+        "seq": 2,
+        "t_ms": 1040,
+        "intent": 1,
+        "level": 1,
+        "confidence": 0,
+        "flags": 0
+      },
+      "bytes": "504e000210040000010100000000f8dd"
+    },
+    {
+      "name": "intent_fwd",
+      "fields": {
+        "seq": 3,
+        "t_ms": 1080,
+        "intent": 2,
+        "level": 1,
+        "confidence": 0,
+        "flags": 0
+      },
+      "bytes": "504e00033804000002010000000017b8"
+    },
+    {
+      "name": "intent_rev",
+      "fields": {
+        "seq": 4,
+        "t_ms": 1120,
+        "intent": 3,
+        "level": 1,
+        "confidence": 0,
+        "flags": 0
+      },
+      "bytes": "504e000460040000030100000000cd78"
+    },
+    {
+      "name": "intent_left",
+      "fields": {
+        "seq": 5,
+        "t_ms": 1160,
+        "intent": 4,
+        "level": 1,
+        "confidence": 0,
+        "flags": 0
+      },
+      "bytes": "504e000588040000040100000000ad8d"
+    },
+    {
+      "name": "intent_right",
+      "fields": {
+        "seq": 6,
+        "t_ms": 1200,
+        "intent": 5,
+        "level": 1,
+        "confidence": 0,
+        "flags": 0
+      },
+      "bytes": "504e0006b00400000501000000002757"
+    },
+    {
+      "name": "intent_mode_next",
+      "fields": {
+        "seq": 7,
+        "t_ms": 1240,
+        "intent": 6,
+        "level": 1,
+        "confidence": 0,
+        "flags": 0
+      },
+      "bytes": "504e0007d8040000060100000000d240"
+    },
+    {
+      "name": "intent_aux_a",
+      "fields": {
+        "seq": 8,
+        "t_ms": 1280,
+        "intent": 7,
+        "level": 1,
+        "confidence": 0,
+        "flags": 0
+      },
+      "bytes": "504e000800050000070100000000912d"
+    },
+    {
+      "name": "intent_aux_b",
+      "fields": {
+        "seq": 9,
+        "t_ms": 1320,
+        "intent": 8,
+        "level": 1,
+        "confidence": 0,
+        "flags": 0
+      },
+      "bytes": "504e0009280500000801000000009d43"
+    },
+    {
+      "name": "all_fields_max",
+      "fields": {
+        "seq": 255,
+        "t_ms": 4294967295,
+        "intent": 8,
+        "level": 3,
+        "confidence": 255,
+        "flags": 31
+      },
+      "bytes": "504e00ffffffffff0803ff1f0000ae34"
+    },
+    {
+      "name": "seq_wrapped_to_zero",
+      "fields": {
+        "seq": 0,
+        "t_ms": 10240,
+        "intent": 1,
+        "level": 2,
+        "confidence": 128,
+        "flags": 0
+      },
+      "bytes": "504e000000280000010280000000dbc8"
+    },
+    {
+      "name": "latched_stop_flag",
+      "fields": {
+        "seq": 42,
+        "t_ms": 123456,
+        "intent": 0,
+        "level": 0,
+        "confidence": 0,
+        "flags": 9
+      },
+      "bytes": "504e002a40e201000000000900002c18"
+    },
+    {
+      "name": "artifact_and_channel_bad",
+      "fields": {
+        "seq": 99,
+        "t_ms": 65536,
+        "intent": 4,
+        "level": 1,
+        "confidence": 17,
+        "flags": 6
+      },
+      "bytes": "504e0063000001000401110600000638"
+    }
+  ],
+  "invalid": [
+    {
+      "name": "empty",
+      "bytes": "",
+      "error": "LEN"
+    },
+    {
+      "name": "short_15",
+      "bytes": "504e0005d007000002025a0000008d",
+      "error": "LEN"
+    },
+    {
+      "name": "long_17",
+      "bytes": "504e0005d007000002025a0000008d7200",
+      "error": "LEN"
+    },
+    {
+      "name": "bad_magic",
+      "bytes": "4e500005d007000002025a000000f3c6",
+      "error": "MAGIC"
+    },
+    {
+      "name": "version_1",
+      "bytes": "504e0105d007000002025a000000f871",
+      "error": "VERSION"
+    },
+    {
+      "name": "crc_bit_flipped",
+      "bytes": "504e0005d007000002025a0000008c72",
+      "error": "CRC"
+    },
+    {
+      "name": "payload_bit_flipped",
+      "bytes": "504e0005d007000002035a0000008d72",
+      "error": "CRC"
+    },
+    {
+      "name": "intent_9",
+      "bytes": "504e0005d007000009025a0000002fb1",
+      "error": "INTENT"
+    },
+    {
+      "name": "level_4",
+      "bytes": "504e0005d007000002045a00000008bf",
+      "error": "LEVEL"
+    },
+    {
+      "name": "flags_bit5",
+      "bytes": "504e0005d007000002025a2000004bf4",
+      "error": "FLAGS"
+    },
+    {
+      "name": "reserved_1",
+      "bytes": "504e0005d007000002025a000100bc41",
+      "error": "RESERVED"
+    }
+  ],
+  "seq_is_newer": [
+    {
+      "candidate": 1,
+      "last": 0,
+      "newer": true
+    },
+    {
+      "candidate": 0,
+      "last": 255,
+      "newer": true
+    },
+    {
+      "candidate": 127,
+      "last": 0,
+      "newer": true
+    },
+    {
+      "candidate": 128,
+      "last": 0,
+      "newer": false
+    },
+    {
+      "candidate": 0,
+      "last": 0,
+      "newer": false
+    },
+    {
+      "candidate": 200,
+      "last": 100,
+      "newer": true
+    },
+    {
+      "candidate": 100,
+      "last": 200,
+      "newer": false
+    },
+    {
+      "candidate": 5,
+      "last": 250,
+      "newer": true
+    }
+  ]
+}
