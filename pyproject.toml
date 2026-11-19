@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "neurodrive"
+version = "0.0.0"
+description = "NeuroDrive host tools, ML pipelines and protocol codecs for the NeuroCore board"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = "Apache-2.0"
+dependencies = [
+  "numpy==2.5.5",
+  "scipy==1.18.1",
+]
+
+[project.optional-dependencies]
+# Dev tools are pinned to the same versions as .pre-commit-config.yaml.
+dev = [
+  "ruff==0.17.5",
+  "black==26.10.1",
+  "clang-format==23.1.5",
+  "pytest==9.2.0",
+  "hypothesis==6.170.15",
+  "pre-commit==4.7.0",
+]
+# Hardware I/O, imported only by the CLI entry points (tests don't need them).
+teleop = ["pyserial==3.5", "pygame==2.6.1"]
+lsl = ["pylsl==1.18.7"]
+rtl = ["cocotb==2.1.0"]
+# Later phases (ROADMAP §11.3):
+#   ml  (Phase 6): scikit-learn, pyriemann, torch, braindecode, snntorch, onnx, esp-ppq, ...
+
+[tool.setuptools.packages.find]
+include = ["host*", "ml*", "protocol*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+extend-exclude = '''^/\.tools/'''
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = [".tools"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+
+[tool.pytest.ini_options]
+minversion = "9.0"
+testpaths = ["tests", "host", "ml", "protocol"]
+pythonpath = ["."]
+addopts = "-ra --strict-markers --strict-config"
+markers = [
+  "hil: needs real hardware and a human operator; never runs in CI",
+  "slow: long-running test",
+]

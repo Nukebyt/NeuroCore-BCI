@@ -1,0 +1,65 @@
+# --- Raw recordings and personal data: NEVER commit (CLAUDE.md rule 7) ---
+/data/*
+!/data/README.md
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+secrets.*
+**/main/secrets.h
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.hypothesis/
+.ipynb_checkpoints/
+
+# Pinned local tools (scripts/install-verible.sh)
+.tools/
+
+# ESP-IDF
+firmware/**/build/
+firmware/**/managed_components/
+firmware/**/sdkconfig
+firmware/**/sdkconfig.old
+protocol/**/build/
+
+# RTL sim / formal / Quartus outputs
+rtl/tb/**/sim_build/
+rtl/tb/**/results.xml
+rtl/tb/*.result.xml
+*.vcd
+*.fst
+rtl/formal/*/
+!rtl/formal/*.sby
+rtl/quartus/db/
+rtl/quartus/incremental_db/
+rtl/quartus/output_files/
+
+# KiCad
+*-backups/
+*.kicad_prl
+fp-info-cache
+_autosave-*
+*.lck
+
+# ML artefacts (large; regenerate with make bench)
+ml/**/checkpoints/
+ml/**/runs/
+*.pt
+*.onnx
+*.espdl
+!ml/data/samples/**
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+hardware/neurocore/fab/quote-DRAFT/

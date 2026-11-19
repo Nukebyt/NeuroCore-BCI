@@ -1,0 +1,51 @@
+# Versions match the pins in pyproject.toml [dev] and scripts/install-verible.sh.
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-json
+      - id: check-toml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: check-added-large-files
+        args: ["--maxkb=1024"]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.5
+    hooks:
+      - id: ruff-check
+
+  - repo: https://github.com/psf/black
+    rev: 26.10.1
+    hooks:
+      - id: black
+
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v23.1.5
+    hooks:
+      - id: clang-format
+        types_or: [c, c++]
+
+  - repo: local
+    hooks:
+      - id: verible-lint
+        name: verible-verilog-lint
+        entry: .tools/verible/bin/verible-verilog-lint
+        language: system
+        files: \.svh?$
+      - id: verible-format
+        name: verible-verilog-format (verify)
+        # --verify accepts one file per call
+        entry: bash -c 'for f in "$@"; do .tools/verible/bin/verible-verilog-format --verify "$f" || exit 1; done' --
+        language: system
+        files: \.svh?$
+      # CLAUDE.md rule 7: raw recordings never enter git.
+      - id: forbid-raw-data
+        name: no raw recordings under data/
+        entry: "data/ is for local recordings only (CLAUDE.md rule 7). Commit small samples under ml/data/samples/ instead."
+        language: fail
+        files: ^data/
+        exclude: ^data/README\.md$

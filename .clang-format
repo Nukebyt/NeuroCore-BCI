@@ -1,0 +1,13 @@
+# C11 firmware style (ADR-0001). 4-space indent to match ESP-IDF code we read daily.
+BasedOnStyle: LLVM
+Language: Cpp
+IndentWidth: 4
+ColumnLimit: 100
+BreakBeforeBraces: Linux
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+PointerAlignment: Right
+AlignConsecutiveMacros: Consecutive
+# ESP-IDF headers can be order-sensitive (sdkconfig.h, FreeRTOS.h before task.h).
+SortIncludes: Never
