@@ -35,3 +35,33 @@ if(NOT WIN32)
 endif()
 
 add_test(NAME dsp COMMAND test_dsp)
+
+add_executable(test_ads1299
+  test_ads1299.c
+  fake_ads1299.c
+  ${NC_DIR}/drivers/ads1299/ads1299.c)
+target_include_directories(test_ads1299 PRIVATE
+  ${NC_DIR}/drivers/ads1299 ${CMAKE_CURRENT_SOURCE_DIR} ${REPO_ROOT}/tests/c)
+target_compile_options(test_ads1299 PRIVATE -Wall -Wextra -Werror -pedantic -Wconversion -Wshadow)
+target_link_libraries(test_ads1299 PRIVATE m)
+if(NOT WIN32)
+  target_compile_options(test_ads1299 PRIVATE -fsanitize=address,undefined -fno-omit-frame-pointer)
+  target_link_options(test_ads1299 PRIVATE -fsanitize=address,undefined)
+endif()
+
+add_test(NAME ads1299 COMMAND test_ads1299)
+
+add_executable(test_ads131m04
+  test_ads131m04.c
+  fake_ads131m04.c
+  ${NC_DIR}/drivers/ads131m04/ads131m04.c)
+target_include_directories(test_ads131m04 PRIVATE
+  ${NC_DIR}/drivers/ads131m04 ${CMAKE_CURRENT_SOURCE_DIR} ${REPO_ROOT}/tests/c)
+target_compile_options(test_ads131m04 PRIVATE -Wall -Wextra -Werror -pedantic -Wconversion -Wshadow)
+target_link_libraries(test_ads131m04 PRIVATE m)
+if(NOT WIN32)
+  target_compile_options(test_ads131m04 PRIVATE -fsanitize=address,undefined -fno-omit-frame-pointer)
+  target_link_options(test_ads131m04 PRIVATE -fsanitize=address,undefined)
+endif()
+
+add_test(NAME ads131m04 COMMAND test_ads131m04)
