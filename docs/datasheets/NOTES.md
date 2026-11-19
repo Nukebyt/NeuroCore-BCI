@@ -62,3 +62,13 @@ ST datasheets (LSM6DSO, USBLC6) could not be downloaded (st.com refused automate
 ## Shadow-lane clamps
 - BAW56 (D4, D5), SOT-23: common anode pin 3, cathodes pins 1 and 2 (Connection Diagram p. 2). VF ≤ 715 mV at 1 mA, ≤ 855 mV at 10 mA; IR ≤ 2.5 µA at 70 V (25 °C); IF(AV) 200 mA (p. 2). Leakage at the ≈ 0 V working point is not specified.
 - Why: ADS131M04 analog inputs abs max AGND − 1.6 V and ±10 mA (§6.1); negative inputs are clamped only by the input diode's reverse breakdown (§8.3.1).
+
+## Car adapter (Phase 1)
+| Part | File | Doc / revision |
+|---|---|---|
+| DRV8833 | `drv8833-slvsar1e.pdf` | TI SLVSAR1E (Jul 2015) |
+| ESP32-C3 | `esp32-c3.pdf` | Espressif ESP32-C3 Series Datasheet v2.5 |
+
+- DRV8833: VM 2.7–10.8 V; 1.5 A RMS / 2 A peak per H-bridge in the PWP package, but 500 mA RMS in the PW package (Features, p. 1); HS + LS RDS(on) 360 mΩ; current regulation when xISEN exceeds VTRIP = 0.2 V (sense resistor to GND). Check which package a module carries and whether its ISEN pins are grounded (no current limit).
+- TB6612FNG: Toshiba's site refused the automated download (HTTP 403); not used unless the owner supplies the datasheet.
+- ESP32-C3 SuperMini board: no official datasheet exists for the board itself (third-party). Its header-to-GPIO pinout must come from the seller's page or schematic before car firmware pins are fixed.

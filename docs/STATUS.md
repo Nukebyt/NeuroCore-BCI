@@ -25,7 +25,7 @@ Living progress log. Work proceeds autonomously through everything that doesn't 
 - Quote (2026-11-19): PCB Power offer INQ663178, 5 pcs bare board, 4L FR4 1.6 mm ENIG 1/0.5 oz, ₹6,650 + 18 % GST, 7 WD to dispatch, valid 30 days. Their drill-tolerance table starts at 0.50 mm; the board now has no hole below 0.30 mm (confirm 0.30 mm vias with them). Re-quote needed after the design changes. Lion Circuits quote pending.
 - **PCB fixes (2026-11-19):** BAW56 clamps D4/D5 on the shadow-lane ADC inputs (abs max); all holes ≥ 0.3 mm (ESP32 thermal vias redrilled); `route.sh` retries until KiCad DRC sees a complete route (Freerouting 2.1.0 sometimes drops vias/wires from its SES). Verified against datasheets: LM27761 divider, TLV757P dropout, USB-C Rd (Type-C spec Table 4-25). Board: 141 parts, ERC 0, DRC 0 errors / 0 unconnected / 0 parity.
 - **Firmware requirement from the dropout check:** shut down below a VBAT cutoff of ≥ 3.5 V under load (VBAT_SENSE on IO4) to keep the 3.3 V rail regulated.
-- **Still open before ordering (ADR-0006):** battery connector polarity (check the pack), J4 cable-entry direction, land patterns vs datasheets, autorouted analog section (ROADMAP §3.4 checklist), lead-off LEDs dropped. Reviewer sign-off required.
+- **Still open before ordering (ADR-0006):** battery connector polarity (check the pack), J4 cable-entry direction, land patterns vs datasheets, autorouted analog section (ROADMAP §3.4 checklist). Lead-off LEDs: dropped (owner, 2026-11-19). Reviewer sign-off required.
 
 ## Phase 4 prep — drivers written ahead of hardware
 - **T4.1 ADS1299-4 driver** — `firmware/neurocore/drivers/ads1299/`: power-up per DS §11.1, register write + read-back verify, RDATAC frames, µV scaling, lead-off status, test-signal mode. 17 host tests against a simulated chip that enforces the datasheet timing rules; mutation check 10/11 killed (survivor is redundant code). ADR-0007.
@@ -52,7 +52,7 @@ Living progress log. Work proceeds autonomously through everything that doesn't 
 4. Phase 3: resolve ADR-0006 open issues; hand-route analog front end.
 
 ## Waiting on the owner
-- Datasheets: motor driver (TB6612FNG or DRV8833), ESP32-C3 SuperMini, bridge ESP32 board; (NeuroCore datasheets are in).
+- Car: DRV8833 and ESP32-C3 datasheets are in; still need the ESP32-C3 SuperMini board pinout (seller page/schematic) and the truck pack voltage.
 - Truck pack voltage (1S/2S).
 - Commit/branch: nothing committed yet; everything staged on `phase-0-foundations`.
 - `LICENSE` file and hardware licence choice.

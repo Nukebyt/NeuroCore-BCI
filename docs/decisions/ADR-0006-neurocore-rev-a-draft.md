@@ -42,7 +42,7 @@ ROADMAP §3 specifies the board at block level. The owner asked for a full attem
 6. **JST-PH battery polarity** is not standardised; check the actual pack.
 7. **Autorouted (J4 orientation unchecked).** The Qwiic connector's cable opening may not face the board edge. Analog input traces, the bias loop and the ADS1299 decoupling were not hand-routed. The ROADMAP §3.4 layout checklist is not satisfied. In particular, decoupling caps are placed by search, not hugging their pins.
 8. **No footprint-to-datasheet land-pattern check** beyond package family and size; KiCad library footprints were used as-is.
-9. Lead-off LEDs per channel (ROADMAP §3.2) were dropped to save GPIOs; lead-off status goes to firmware/UI instead.
+9. ~~Lead-off LEDs per channel (ROADMAP §3.2).~~ **Decided 2026-11-19 (owner): dropped.** Lead-off status comes from the ADS1299 status word in every frame (ADR-0007) and is shown in firmware/UI.
 
 ## Consequences
 - Regenerating is cheap: edit `design.py`, rerun the scripts, re-check ERC, netlist and DRC.
