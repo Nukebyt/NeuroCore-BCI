@@ -67,3 +67,7 @@ hardware/neurocore/fab/*
 !hardware/neurocore/fab/neurocore-bom.csv
 # USB-IF specification: kept locally, not redistributed (see docs/datasheets/NOTES.md)
 docs/datasheets/usb-type-c-spec-r2.0.pdf
+
+# Local planning / assistant files: kept on the owner's machine, not published
+/CLAUDE.md
+/ROADMAP.md

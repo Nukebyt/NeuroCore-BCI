@@ -4,7 +4,6 @@ NeuroCore is a battery-powered EEG + EMG acquisition board (ADS1299-4 + ADS131M0
 
 This is a hobby and research project. It is **not a medical device** and makes no medical claims.
 
-- Plan: [ROADMAP.md](ROADMAP.md)
 - Progress: [docs/STATUS.md](docs/STATUS.md)
 - Safety rules (read before touching hardware): [docs/safety.md](docs/safety.md)
 - Design decisions: [docs/decisions/](docs/decisions/)
